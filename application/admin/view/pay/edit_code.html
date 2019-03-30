@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>小红帽科技|草帽聚合支付 - 后台管理 - 支付方式编辑</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="__ADMIN__/layui/css/layui.css" media="all">
+</head>
+<body>
+
+<div class="layui-form" style="padding: 20px 30px 0 0;">
+    <input type="text" name="id" hidden disabled value="{$code.id}">
+    <div class="layui-form-item">
+        <label class="layui-form-label">产品名称：</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" required lay-verify="required" placeholder="请输入产品名称" autocomplete="off" class="layui-input" value="{$code.name}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">通道代码：</label>
+        <div class="layui-input-block">
+            <input type="text" name="code" required lay-verify="required" placeholder="请输入通道代码" autocomplete="off" class="layui-input" value="{$code.code}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">渠道支持：</label>
+        <div class="layui-input-block">
+            {volist name="channel" id="vo"}
+            <input type="checkbox" name="cnl_id[]" value="{$vo.id}" {in name="$vo.id" value="$code.cnl_id"}checked{/in} title="{$vo.name}" lay-skin="primary">
+            {/volist}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">状态：</label>
+        <div class="layui-input-block">
+            <input type="radio" name="status" value="1" title="启用" {$code.status == 1?'checked':''}>
+            <input type="radio" name="status" value="0" title="禁用" {$code.status == 0?'checked':''}>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">备注：</label>
+        <div class="layui-input-block">
+            <input type="text" name="remarks" value="{$code.remarks}" required placeholder="请输入备注" autocomplete="off" class="layui-input" lay-filter="remarks">
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="app-pay-code-submit" id="app-pay-code-submit" value="确认">
+    </div>
+</div>
+
+<script src="__ADMIN__/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '__ADMIN__/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form'], function(){
+        var $ = layui.$
+            ,form = layui.form;
+
+    })
+</script>
+</body>
+</html>

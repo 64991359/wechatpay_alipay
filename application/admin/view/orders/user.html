@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>小红帽科技|草帽聚合支付 - 后台管理 - 商户统计</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="__ADMIN__/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="__ADMIN__/style/admin.css" media="all">
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <!--头部-->
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">商户号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="uid" placeholder="请输入商户号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">开始时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="start" class="layui-input app-laydate-item" placeholder="yyyy-MM-dd">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">结束时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="end" class="layui-input app-laydate-item" placeholder="yyyy-MM-dd">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-order" lay-submit lay-filter="app-order-user-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!--数据表-->
+        <div class="layui-card-body">
+            <table id="app-order-user" lay-filter="app-order-user"></table>
+        </div>
+    </div>
+</div>
+
+<script src="__ADMIN__/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '__ADMIN__/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form' ,'laydate' ,'table'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,laydate = layui.laydate
+            ,table = layui.table;
+
+        //监听搜索
+        form.on('submit(app-order-user-search)', function(data){
+            var field = data.field;
+
+            //执行重载
+            table.reload('app-order-user', {
+                where: field
+            });
+        });
+
+        //同时绑定多个日期
+        lay('.app-laydate-item').each(function(){
+            laydate.render({
+                elem: this
+                ,value: new Date()
+                ,trigger: 'click'
+            });
+        });
+
+
+        //初始化表格
+        table.render({
+            elem: "#app-order-user"
+            ,url: 'userList'
+            //自定义响应字段
+            ,response: {
+                statusCode: 1 //数据状态一切正常的状态码
+            },
+            cols: [[{
+                type: "checkbox",
+                fixed: "left"
+            },
+                {
+                    field: "uid",
+                    title: "商户UID",
+                    sort: !0
+                },
+                {
+                    field: "total_orders",
+                    title: "订单总数"
+                },
+                {
+                    field: "total_fee_all",
+                    title: "交易总额",
+                    style: "color:red"
+                },
+                {
+                    field: "total_fee_dis",
+                    title: "未成交",
+                    style: "color:red"
+                },
+                {
+                    field: "total_fee_paid",
+                    title: "成交量",
+                    style: "color:red"
+                }]],
+            page: {
+                limit: 10,
+                limits: [10, 15, 20, 25, 30],
+            },
+            text: "对不起，加载出现异常！",
+            done: function() {
+                //加载完成
+            }
+        })
+
+    });
+</script>
+</body>
+</html>

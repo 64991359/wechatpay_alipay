@@ -1,0 +1,110 @@
+{__NOLAYOUT__}<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>登入 - 小红帽科技|草帽聚合支付 - 后台管理<</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="__ADMIN__/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="__ADMIN__/style/admin.css" media="all">
+    <link rel="stylesheet" href="__ADMIN__/style/login.css" media="all">
+</head>
+<body>
+
+<div class="layadmin-user-login layadmin-user-display-show" id="LAY-user-login" style="display: none;">
+
+    <div class="layadmin-user-login-main">
+        <div class="layadmin-user-login-box layadmin-user-login-header">
+            <h2>聚合 · 后台管理</h2>
+            <p>欢迎使用{$site.seo_title|default="草帽聚合支付"}系统</p>
+        </div>
+        <div class="layadmin-user-login-box layadmin-user-login-body layui-form">
+            <div class="layui-form-item">
+                <label class="layadmin-user-login-icon layui-icon layui-icon-username" for="app-user-login-username"></label>
+                <input type="text" name="username" id="app-user-login-username" lay-verify="required|username" placeholder="用户名" class="layui-input">
+            </div>
+            <div class="layui-form-item">
+                <label class="layadmin-user-login-icon layui-icon layui-icon-password" for="app-user-login-password"></label>
+                <input type="password" name="password" id="app-user-login-password" lay-verify="required|password" placeholder="密码" class="layui-input">
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-row">
+                    <div class="layui-col-xs7">
+                        <label class="layadmin-user-login-icon layui-icon layui-icon-vercode" for="app-user-login-vercode"></label>
+                        <input type="text" name="vercode" id="app-user-login-vercode" lay-verify="required|vercode" placeholder="图形验证码" class="layui-input">
+                    </div>
+                    <div class="layui-col-xs5">
+                        <div style="margin-left: 10px;">
+                            <img src="{:captcha_src()}" class="layadmin-user-login-codeimg" id="app-user-get-vercode">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <button class="layui-btn layui-btn-normal layui-btn-fluid" lay-submit lay-filter="app-user-login-submit">登 入</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-trans layadmin-user-login-footer">
+
+        <p>{$site.app_copyright|default="© 2018 Caomao. "} <a href="https://www.iredcap.cn" target="_blank">小红帽科技</a> · {$site.seo_title|default="草帽聚合支付"} · 桂ICP备180004251号</p>
+    </div>
+
+    <!--<div class="ladmin-user-login-theme">
+      <script type="text/html" template>
+        <ul>
+          <li data-theme=""><img src="{{ layui.setter.base }}style/res/bg-none.jpg"></li>
+          <li data-theme="#03152A" style="background-color: #03152A;"></li>
+          <li data-theme="#2E241B" style="background-color: #2E241B;"></li>
+          <li data-theme="#50314F" style="background-color: #50314F;"></li>
+          <li data-theme="#344058" style="background-color: #344058;"></li>
+          <li data-theme="#20222A" style="background-color: #20222A;"></li>
+        </ul>
+      </script>
+    </div>-->
+
+</div>
+
+<script src="__ADMIN__/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '__ADMIN__/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'login'], function(){
+        var $ = layui.$
+            ,setter = layui.setter
+            ,admin = layui.admin
+            ,form = layui.form
+            ,router = layui.router()
+            ,search = router.search;
+
+        form.render();
+
+        //提交
+        form.on('submit(app-user-login-submit)', function(obj){
+            //请求登入接口
+            $.post("{:url('login')}",obj.field,function (res) {
+                    if (res.code == 1){
+                        //请求成功后，写入 access_token
+                        layui.data(setter.tableName, {
+                            key: setter.request.tokenName
+                            ,value: res.data.access_token
+                        });
+                        layer.msg('登入成功', {icon: 1,time: 1500}, function(){
+                            location.href = "/admin.html"; //后台主页
+                        });
+                    }else {
+                        $("#app-user-get-vercode").click();
+                        layer.msg(res.msg, {icon: 2,time: 1500});
+                    }
+                }
+            );
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

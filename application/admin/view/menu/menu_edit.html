@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<!--
+  ~  +----------------------------------------------------------------------
+  ~  | 草帽支付系统 [ WE CAN DO IT JUST THINK ]
+  ~  +----------------------------------------------------------------------
+  ~  | Copyright (c) 2018 http://www.iredcap.cn All rights reserved.
+  ~  +----------------------------------------------------------------------
+  ~  | Licensed ( https://www.apache.org/licenses/LICENSE-2.0 )
+  ~  +----------------------------------------------------------------------
+  ~  | Author: Brian Waring <BrianWaring98@gmail.com>
+  ~  +----------------------------------------------------------------------
+  -->
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>小红帽科技|草帽聚合支付 - 编辑菜单</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="__ADMIN__/layui/css/layui.css" media="all">
+</head>
+<body>
+
+<div class="layui-form" lay-filter="layuiadmin-form-admin" id="layuiadmin-form-admin" style="padding: 20px 30px 0 0;">
+    <input type="text" name="id" readonly value="{$info.id}" hidden >
+    <input type="text" name="scene" value="edit" hidden >
+    <div class="layui-form-item">
+        <label class="layui-form-label">上级菜单</label>
+        <div class="layui-input-block">
+            <select name="pid">
+            <option value="0">顶级菜单</option>
+            {volist name='menu_select' id='vo'}
+                <option {$Request.get.pid == $vo.id ?'selected':''} value="{$vo.id}">{$vo.name}</option>
+            {/volist}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜单名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="name" value="{$info.name|default=''}" lay-verify="required" placeholder="请输入菜单名称" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜单Url</label>
+        <div class="layui-input-block">
+            <input type="text" name="url" value="{$info.url|default=''}" lay-verify="required" placeholder="请输入菜单Url" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜单模块</label>
+        <div class="layui-input-block">
+            <input type="text" name="module" value="{$info.module|default='admin'}" lay-verify="required" placeholder="请输入模块" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">图标</label>
+        <div class="layui-input-block">
+            <input type="text" name="icon" value="{$info.icon|default=''}" placeholder="请输入图标" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否隐藏：</label>
+        <div class="layui-input-inline">
+            <input type="radio" name="is_hide" value="1" title="是" {$info.is_hide == '1'?'checked':''}>
+            <input type="radio" name="is_hide" value="0" title="否" {$info.is_hide == '0'?'checked':''}>
+        </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+        <input type="button" lay-submit lay-filter="app-admin-menu-submit" id="app-admin-menu-submit" value="确认">
+    </div>
+</div>
+
+<script src="__ADMIN__/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '__ADMIN__/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','treeSelect', 'form'], function(){
+        var $ = layui.$,
+            treeSelect= layui.treeSelect
+            ,form = layui.form;
+
+    })
+</script>
+</body>
+</html>

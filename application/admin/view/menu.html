@@ -1,0 +1,168 @@
+<!--
+  ~  +----------------------------------------------------------------------
+  ~  | 草帽支付系统 [ WE CAN DO IT JUST THINK ]
+  ~  +----------------------------------------------------------------------
+  ~  | Copyright (c) 2018 http://www.iredcap.cn All rights reserved.
+  ~  +----------------------------------------------------------------------
+  ~  | Licensed ( https://www.apache.org/licenses/LICENSE-2.0 )
+  ~  +----------------------------------------------------------------------
+  ~  | Author: Brian Waring <BrianWaring98@gmail.com>
+  ~  +----------------------------------------------------------------------
+  -->
+
+<ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
+    {volist name='_menuList.father' id='vo'}
+    <li class="layui-nav-item">
+        <a href="javascript:;" lay-tips="{$vo.name}" lay-direction="2">
+            <i class="layui-icon layui-icon-{$vo.ico}"></i>
+            {$vo.name}
+        </a>
+        {volist name='_menuList.child' id='vv'}
+        {if condition="$vv.pid eq $vo.id"}
+        <dl class="layui-nav-child">
+            <dd data-name="{$vv.name}">
+                <a lay-href="{:url($vv.controller.'/'.$vv.action)}">{$vv.name}</a>
+            </dd>
+        </dl>
+        {/if}
+        {/volist}
+    </li>
+    {/volist}
+</ul>
+
+<li class="layui-nav-item">
+    <a href="javascript:;" lay-tips="系统设置" lay-direction="2">
+        <i class="layui-icon layui-icon-set"></i>
+        系统设置                        <span class="layui-nav-more"></span></a>
+    <dl class="layui-nav-child">
+        <dd data-name="菜单管理">
+            <a lay-href="/menu/index.html">菜单管理</a>
+        </dd>
+    </dl>
+    <dl class="layui-nav-child">
+        <dd data-name="系统安全">
+            <a lay-href="/safe/index.html">系统安全</a>
+        </dd>
+    </dl>
+    <dl class="layui-nav-child">
+        <dd data-name="基本设置">
+            <a lay-href="/system/index.html">基本设置</a>
+        </dd>
+    </dl>
+</li>
+<li class="layui-nav-item">
+    <a href="javascript:;" lay-tips="支付管理" lay-direction="2">
+        <i class="layui-icon layui-icon-set"></i>
+        支付管理                        <span class="layui-nav-more"></span></a>
+    <dl class="layui-nav-child">
+        <dd data-name="渠道管理">
+            <a lay-href="/channel/index.html">渠道管理</a>
+        </dd>
+    </dl>
+    <dl class="layui-nav-child">
+        <dd data-name="风控管理">
+            <a lay-href="/channel/risk .html">风控管理</a>
+        </dd>
+    </dl>
+</li>
+<li class="layui-nav-item">
+    <a href="javascript:;" lay-tips="内容管理" lay-direction="2">
+        <i class="layui-icon layui-icon-template"></i>
+        内容管理                        <span class="layui-nav-more"></span></a>
+    <dl class="layui-nav-child">
+        <dd data-name="文章管理">
+            <a lay-href="/article/index.html">文章管理</a>
+        </dd>
+    </dl>
+    <dl class="layui-nav-child">
+        <dd data-name="公告管理">
+            <a lay-href="/article/notice.html">公告管理</a>
+        </dd>
+    </dl>
+</li>
+<li class="layui-nav-item">
+    <a href="javascript:;" lay-tips="商户管理" lay-direction="2">
+        <i class="layui-icon layui-icon-user"></i>
+        商户管理                        <span class="layui-nav-more"></span></a>
+    <dl class="layui-nav-child">
+        <dd data-name="商户列表">
+            <a lay-href="/user/index.html">商户列表</a>
+        </dd>
+    </dl>
+    <dl class="layui-nav-child">
+        <dd data-name="付款记录">
+            <a lay-href="/balance/paid.html">付款记录</a>
+        </dd>
+    </dl>
+    <dl class="layui-nav-child">
+        <dd data-name="商户账号">
+            <a lay-href="/account/index.html">商户账号</a>
+        </dd>
+    </dl>
+    <dl class="layui-nav-child">
+        <dd data-name="商户资金">
+            <a lay-href="/balance/index.html">商户资金</a>
+        </dd>
+    </dl>
+    <dl class="layui-nav-child">
+        <dd data-name="商户API">
+            <a lay-href="/api/index.html">商户API</a>
+        </dd>
+    </dl>
+</li>
+<li class="layui-nav-item">
+    <a href="javascript:;" lay-tips="订单管理" lay-direction="2">
+        <i class="layui-icon layui-icon-form"></i>
+        订单管理                        <span class="layui-nav-more"></span></a>
+    <dl class="layui-nav-child">
+        <dd data-name="订单列表">
+            <a lay-href="/orders/index.html">订单列表</a>
+        </dd>
+    </dl>
+    <dl class="layui-nav-child">
+        <dd data-name="退款列表">
+            <a lay-href="/orders/refund.html">退款列表</a>
+        </dd>
+    </dl>
+    <dl class="layui-nav-child">
+        <dd data-name="商户统计">
+            <a lay-href="/orders/user.html">商户统计</a>
+        </dd>
+    </dl>
+    <dl class="layui-nav-child">
+        <dd data-name="渠道统计">
+            <a lay-href="/orders/channel.html">渠道统计</a>
+        </dd>
+    </dl>
+</li>
+<li data-name="set" class="layui-nav-item">
+    <a href="javascript:;" lay-tips="设置" lay-direction="2">
+        <i class="layui-icon layui-icon-set"></i>
+        <cite>设置</cite>
+    </a>
+    <dl class="layui-nav-child">
+        <dd class="layui-nav-itemed">
+            <a href="javascript:;">系统设置</a>
+            <dl class="layui-nav-child">
+                <dd><a lay-href="/system/index.html">网站设置</a></dd>
+                <dd><a lay-href="/system/menu.html">菜单管理</a></dd>
+                <dd><a lay-href="/system/email.html">邮件服务</a></dd>
+            </dl>
+        </dd>
+        <dd class="layui-nav-itemed">
+            <a href="javascript:;">角色设置</a>
+            <dl class="layui-nav-child">
+                <dd><a lay-href="/admin/index.html">后台管理员</a></dd>
+                <dd><a lay-href="/admin/group.html">角色管理</a></dd>
+            </dl>
+        </dd>
+        <dd class="layui-nav-itemed">
+            <a href="javascript:;">我的设置</a>
+            <dl class="layui-nav-child">
+                <dd><a lay-href="/user/info.html">基本资料</a></dd>
+                <dd><a lay-href="/user/password.html">修改密码</a></dd>
+            </dl>
+        </dd>
+    </dl>
+</li>
+<span class="layui-nav-bar" style="height: 0px; top: 308px; opacity: 0;"></span>

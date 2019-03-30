@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>小红帽科技|草帽聚合支付 - 后台管理 - 商户列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="__ADMIN__/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="__ADMIN__/style/admin.css" media="all">
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">商户UID</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="uid" placeholder="请输入商户UID" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">商户邮件</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="username" placeholder="请输入商户邮件" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">开始时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="start" class="layui-input app-laydate-item" placeholder="yyyy-MM-dd">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">结束时间</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="end" class="layui-input app-laydate-item" placeholder="yyyy-MM-dd">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">商户状态</label>
+                    <div class="layui-input-block">
+                        <select name="status" lay-filter="status">
+                            <option value="">请选择一个状态</option>
+                            <option {$Request.get.status == '0' ? 'selected' : '' } value="0">禁止商户</option>
+                            <option {$Request.get.status == '1' ? 'selected' : '' } value="1">正常商户</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="app-user-manage-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div class="app-user-manage" style="padding-bottom: 10px;">
+                <button class="layui-btn layuiadmin-btn-useradmin layui-btn-normal layui-btn-sm" data-type="add">添加</button>
+                <button class="layui-btn layuiadmin-btn-useradmin layui-btn-danger layui-btn-sm" data-type="batchdel">删除</button>
+            </div>
+            <table id="app-user-manage" lay-filter="app-user-manage"></table>
+            <script type="text/html" id="imgTpl">
+                <img style="display: inline-block; width: 50%; height: 100%;" src= {{ d.avatar }}>
+            </script>
+            <script type="text/html" id="isAgent">
+                {{#  if(d.is_agent == '1' ){ }}
+                <button class="layui-btn layui-btn-xs">是</button>
+                {{#  } else { }}
+                <button class="layui-btn layui-btn-danger layui-btn-xs">否</button>
+                {{#  } }}
+            </script>
+            <script type="text/html" id="isPhone">
+                {{#  if(d.is_verify_phone == '1' ){ }}
+                <button class="layui-btn layui-btn-xs">是</button>
+                {{#  } else { }}
+                <button class="layui-btn layui-btn-danger layui-btn-xs">否</button>
+                {{#  } }}
+            </script>
+            <script type="text/html" id="isVerify">
+                {{#  if(d.is_verify == '1' ){ }}
+                <button class="layui-btn layui-btn-xs">是</button>
+                {{#  } else { }}
+                <button class="layui-btn layui-btn-danger layui-btn-xs">否</button>
+                {{#  } }}
+            </script>
+            <script type="text/html" id="buttonTpl">
+                {{#  if(d.status == '1'){ }}
+                <button class="layui-btn layui-btn-xs">启用</button>
+                {{#  } else { }}
+                <button class="layui-btn layui-btn-warm layui-btn-xs">禁用</button>
+                {{#  } }}
+            </script>
+            <script type="text/html" id="table-useradmin-webuser">
+                <a class="layui-btn layui-btn-warm layui-btn-xs"  lay-event="profit"><i class="layui-icon layui-icon-auz"></i>分成</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+            </script>
+        </div>
+    </div>
+</div>
+
+<script src="__ADMIN__/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '__ADMIN__/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'user','form','laydate', 'table'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,laydate = layui.laydate
+            ,table = layui.table;
+
+        //同时绑定多个日期
+        lay('.app-laydate-item').each(function(){
+            laydate.render({
+                elem: this
+                ,value: new Date()
+                ,trigger: 'click'
+            });
+        });
+
+        //监听搜索
+        form.on('submit(app-user-manage-search)', function(data){
+            var field = data.field;
+
+            //执行重载
+            table.reload('app-user-manage', {
+                where: field
+            });
+        });
+
+        //事件
+        var active = {
+            batchdel: function(){
+                var checkStatus = table.checkStatus('app-user-manage')
+                    ,checkData = checkStatus.data; //得到选中的数据
+
+                if(checkData.length === 0){
+                    return layer.msg('请选择数据');
+                }
+
+                layer.prompt({
+                    formType: 1
+                    ,title: '敏感操作，请验证口令'
+                }, function(value, index){
+                    layer.close(index);
+
+                    layer.confirm('确定删除吗？', function(index) {
+
+                        //执行 Ajax 后重载
+                        /*
+                        admin.req({
+                          url: 'xxx'
+                          //,……
+                        });
+                        */
+                        table.reload('app-user-manage');
+                        layer.msg('等待开发...');
+                    });
+                });
+            }
+            ,add: function(){
+                layer.open({
+                    type: 2
+                    ,title: '添加用户'
+                    ,content: 'add'
+                    ,maxmin: true
+                    ,area: ['80%','60%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(index, layero){
+                        var iframeWindow = window['layui-layer-iframe'+ index]
+                            ,submitID = 'app-user-manage-submit'
+                            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                        //监听提交
+                        iframeWindow.layui.form.on('submit('+ submitID +')', function(obj){
+                            var field = obj.field; //获取提交的字段
+
+                            //提交 Ajax 成功后，静态更新表格中的数据
+                            $.ajax({
+                                url:'add',
+                                method:'POST',
+                                data:field,
+                                success:function (res) {
+                                    if (res.code == 1){
+                                        table.reload('app-user-manage'); //数据刷新
+                                    }
+                                    layer.msg(res.msg, {icon: res.code == 1 ? 1: 2,time: 1500});
+                                    layer.close(index); //关闭弹层
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            }
+        };
+
+        $('.layui-btn.layuiadmin-btn-useradmin').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+</script>
+</body>
+</html>

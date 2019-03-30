@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>小红帽科技|草帽聚合支付 - 后台管理 - 商户资产列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="__ADMIN__/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="__ADMIN__/style/admin.css" media="all">
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+            <div class="layui-form-item">
+                <!--//隐藏请求用户UID-->
+                <input name="uid" value="{$uid}" hidden>
+                <label class="layui-form-label">开始时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="start" class="layui-input app-laydate-item" placeholder="yyyy-MM-dd">
+                </div>
+                <label class="layui-form-label">结束时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="end" class="layui-input app-laydate-item" placeholder="yyyy-MM-dd">
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="app-balance-details-list-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <table id="app-balance-details-list" lay-filter="app-balance-details-list"></table>
+            <script type="text/html" id="buttonType">
+                {{#  if(d.type == 'enable'){ }}
+                <span>可用余额</span>
+                {{#  } else if(d.type == 'disable'){ }}
+                <span>冻结余额</span>
+                {{#  } else { }}
+                <span>账户余额</span>
+                {{#  } }}
+            </script>
+            <script type="text/html" id="buttonTpl">
+                {{#  if(d.status == '1'){ }}
+                <button class="layui-btn layui-btn-xs">处理完成</button>
+                {{#  } else { }}
+                <button class="layui-btn layui-btn-danger layui-btn-xs">禁止操作</button>
+                {{#  } }}
+            </script>
+        </div>
+    </div>
+</div>
+
+<script src="__ADMIN__/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '__ADMIN__/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','laydate', 'balance'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,laydate = layui.laydate
+            ,table = layui.table;
+
+        //同时绑定多个日期
+        lay('.app-laydate-item').each(function(){
+            laydate.render({
+                elem: this
+                ,value: new Date()
+                ,trigger: 'click'
+            });
+        });
+
+        //监听搜索
+        form.on('submit(app-balance-details-list-search)', function(data){
+            var field = data.field;
+
+            //执行重载
+            table.reload('app-balance-details-list', {
+                where: field
+            });
+        });
+
+    });
+</script>
+</body>
+</html>

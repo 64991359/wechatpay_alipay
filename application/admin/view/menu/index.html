@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>小红帽科技|草帽聚合支付 - 菜单管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="__ADMIN__/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="__ADMIN__/style/admin.css" media="all">
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layui-btn-normal layuiadmin-btn-admin layui-btn-sm" data-type="add">添加</button>
+                <button class="layui-btn layui-btn-danger layuiadmin-btn-admin layui-btn-sm" data-type="batchdel">删除</button>
+            </div>
+
+            <table id="app-admin-menu-list" lay-filter="app-admin-menu-list"></table>
+            <script type="text/html" id="buttonTpl">
+                {{#  if(d.status == 1){ }}
+                <button class="layui-btn layui-btn-xs">正常</button>
+                {{#  } else { }}
+                <button class="layui-btn layui-btn-danger layui-btn-xs">禁用</button>
+                {{#  } }}
+            </script>
+            <script type="text/html" id="table-menu-list">
+                <a class="layui-btn layui-btn-xs" lay-event="add"><i class="layui-icon layui-icon-add-1">添加</i></a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+            </script>
+        </div>
+    </div>
+</div>
+
+<script src="__ADMIN__/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: '__ADMIN__/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index','menu','table'], function(){
+        var $ = layui.$
+            ,form = layui.form
+            ,table = layui.table;
+
+        //监听搜索
+        form.on('submit(app-admin-menu-search)', function(data){
+            var field = data.field;
+
+            //执行重载
+            table.reload('app-admin-menu-list', {
+                where: field
+            });
+        });
+
+
+        //事件
+        var active = {
+            batchdel: function(){
+                var checkStatus = table.checkStatus('app-admin-menu-list')
+                    ,checkData = checkStatus.data; //得到选中的数据
+
+                if(checkData.length === 0){
+                    return layer.msg('请选择数据');
+                }
+
+                layer.prompt({
+                    formType: 1
+                    ,title: '敏感操作，请验证口令'
+                }, function(value, index){
+                    layer.close(index);
+
+                    layer.confirm('确定删除吗？', function(index) {
+
+                        //执行 Ajax 后重载
+                        /*
+                        admin.req({
+                          url: 'xxx'
+                          //,……
+                        });
+                        */
+                        table.reload('app-admin-menu-list');
+                        layer.msg('已删除');
+                    });
+                });
+            }
+            ,add: function(){
+                layer.open({
+                    type: 2
+                    ,title: '添加菜单'
+                    ,content: '/menu/menuAdd.html'
+                    ,area: ['80%','60%']
+                    ,btn: ['确定', '取消']
+                    ,yes: function(f, n){
+                        var l = window['layui-layer-iframe'+ f]
+                            ,r = 'app-admin-menu-submit'
+                            ,submit = n.find('iframe').contents().find('#'+ r);
+
+                        //监听提交
+                        l.layui.form.on('submit('+ r +')',
+                            function(t){
+                            var l = t.field; //获取提交的字段
+                            //提交 Ajax 成功后，静态更新表格中的数据
+                            $.ajax({
+                                url:'/menu/menuAdd',
+                                method:'POST',
+                                data:l,
+                                success:function (res) {
+                                    if (res.code == 1){
+                                        table.reload('app-admin-menu-list'); //数据刷新
+                                    }
+                                    layer.msg(res.msg, {icon: res.code == 1 ? 1: 2,time: 1500});
+                                     layer.close(f); //关闭弹层
+                                }
+                            });
+                        });
+
+                        submit.trigger('click');
+                    }
+                });
+            }
+        }
+        $('.layui-btn.layuiadmin-btn-admin').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+</script>
+</body>
+</html>
+
