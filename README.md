@@ -8,7 +8,7 @@ ykpay_v20190320(测试版本)
 
 - 目前已经接入支付渠道：微信(扫码支付)、支付宝(电脑网站支付、手机网站支付)；
 
-> [小红帽科技：http://www.lben.cn](http://www.lben.cn "小红帽科技")
+> [小红帽科技：http://www.lben.cn](http://www.lben.cn "乐本园科技")
 
 
 > 运行环境要求PHP > 5.6以上(推荐7.0.*)。
@@ -106,9 +106,9 @@ V1.0.0 |2018-10-23 |最初版本
 
 Email: 64991359@qq.com
 
-Github: https://github.com/iredcap/pay
+Github: https://github.com/64991359/wechatpay_alipay
 
-Gitee: https://gitee.com/iredcap/pay
+
 
 ## **特别鸣谢**
 
@@ -127,15 +127,9 @@ OneBase： https://www.onebase.org
 
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
 
-版权所有Copyright © 2017-2018 by Iredcap (http://www.lben.cn)
+版权所有Copyright © 2017-2019 by (http://www.lben.cn)
 
 All rights reserved。
 
-## 若对您有帮助，支持下吧
 
-![赞赏](https://sirhe.cn/wp-content/uploads/2018/06/打赏.jpg)
 
-称呼 | 方式 | 金额
-------- | ------- | -------
-*二云 | 支付宝收款码 |￥200.00
-*丽 | 支付宝收款码 |￥68.00
